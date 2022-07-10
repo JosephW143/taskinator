@@ -44,7 +44,7 @@ var taskFormHandler = function(event) {
   }
 
   createTaskEl(taskDataObj);
-  };
+  }
 
   var completeEditTask = function(taskName, taskType, taskId) {
     // find all matching task list item 
@@ -62,14 +62,13 @@ var taskFormHandler = function(event) {
       }
     }
 
+    saveTasks();
+
     alert("Task updated!");
 
     formEl.removeAttribute("data-task-id");
     document.querySelector("#save-task").textContent = "Add Task";
-
-    console.log(taskDataObj);
-    console.log(taskDataObj.status);
-  };
+  }
 
   var createTaskEl = function(taskDataObj) {
     // create list item
@@ -97,9 +96,11 @@ var taskFormHandler = function(event) {
 
   tasks.push(taskDataObj);
 
+  saveTasks();
+
   // increace task counter fot next unique id
   taskIdCounter++;
-  };
+  }
 
   var createTaskActions = function(taskId) {
     var actionContainerEl = document.createElement("div");
@@ -159,7 +160,7 @@ var taskFormHandler = function(event) {
       var taskId = targetEl.getAttribute("data-task-id");
       deleteTask(taskId);
     }
-  };
+  }
 
   var taskStatusChangeHandler = function(event) {
     // get the task items 
@@ -187,7 +188,9 @@ var taskFormHandler = function(event) {
         task[i].status = statusValue;
       }
     }
-  };
+
+    saveTasks();
+  }
 
   var editTask = function(taskId) {
     console.log("editing task #" + taskId)
@@ -205,7 +208,7 @@ var taskFormHandler = function(event) {
     document.querySelector("#save-task").textContent = "Save Task";
 
     formEl.setAttribute("data-task-id", taskId);
-  };
+  }
 
   var deleteTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
@@ -224,7 +227,13 @@ var taskFormHandler = function(event) {
 
     // reassign tasks array to be the same as updatedTaskArr
     tasks = updatedTaskArr;
-  };
+
+    saveTasks();
+  }
+
+  var saveTasks = function() {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }
 
   formEl.addEventListener("submit", taskFormHandler);
   pageContentEl.addEventListener("click", taskButtonHandler);
